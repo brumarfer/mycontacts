@@ -1,0 +1,9 @@
+{
+  "name": "mycontacts",
+  "version": "1.0.0",
+  "description": "API to Store Contacs",
+  "main": "src/index/js",
+  "repository": "https://github.com/mbvitoriano/myContacts.git",
+  "author": "mbVitoriano",
+  "license": "MIT"
+}
