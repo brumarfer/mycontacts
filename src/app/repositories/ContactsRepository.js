@@ -2,11 +2,11 @@ const { v4 } = require('uuid');
 
 let contacts = [
   {
-  id: v4(),
-  name: 'Matheus Vitoriano',
-  email: 'matheus@mail.com',
-  phone: '123456789',
-  category_id: v4(),
+    id: v4(),
+    name: 'Matheus Vitoriano',
+    email: 'matheus@mail.com',
+    phone: '123456789',
+    category_id: v4(),
   },
   {
     id: v4(),
@@ -14,7 +14,7 @@ let contacts = [
     email: 'Iago@mail.com',
     phone: '123456789',
     category_id: v4(),
-    },
+  },
 ];
 
 class ContactsRepository {
@@ -55,6 +55,27 @@ class ContactsRepository {
 
       contacts.push(newContact)
       resolve(newContact);
+    });
+  }
+
+  update(id, {
+    name, email, phone, category_id }) {
+    return new Promise((resolve) => {
+
+      const updatedContact = {
+        id,
+        name,
+        email,
+        phone,
+        category_id
+      };
+
+      contacts = contacts.map((contact) => (
+        contact.id === id ? updatedContact : contact
+      ));
+
+
+      resolve(updatedContact);
     });
   }
 

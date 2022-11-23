@@ -13,7 +13,7 @@ class ContactController {
 
     const contact = await ContactsRepository.findById(id);
 
-    if(!contact) {
+    if (!contact) {
       // 404: Not Found
       return res.status(404).json({ error: 'User Not Found' });
     }
@@ -32,7 +32,7 @@ class ContactController {
     const contactExists = await ContactsRepository.findByEmail(email);
 
     if (contactExists) {
-      return res.status(400).json({ error: 'This e-mail is already been taken' })
+      return res.status(400).json({ error: 'This e-mail is already in use' })
     }
 
     const contact = await ContactsRepository.create({
@@ -42,8 +42,35 @@ class ContactController {
     res.json(contact);
   }
 
-  update() {
+  async update(req, res) {
     // Editar um registro
+
+    const { id } = req.params;
+
+    const { name, email, phone, category_id } = req.body;
+
+    const contactExists = await ContactsRepository.findById(id);
+
+    if (!contactExists) {
+      // 404: Not Found
+      return res.status(404).json({ error: 'User Not Found' });
+    }
+
+    if (!name) {
+      return res.status(400).json({ error: 'Name is required.' })
+    }
+
+    const contactByMail = await ContactsRepository.findByEmail(email);
+
+    if (contactByMail && contactByMail.id !== id) {
+      return res.status(400).json({ error: 'This e-mail is already in use' })
+    }
+
+    const contact = await ContactsRepository.update(id, {
+      name, email, phone, category_id,
+    });
+
+    res.json(contact);
 
   }
 
@@ -54,7 +81,7 @@ class ContactController {
     const contact = await ContactsRepository.findById(id);
 
     if (!contact) {
-      return res.status(404).json({ error: 'Can`t delete! User not found.'})
+      return res.status(404).json({ error: 'Can`t delete! User not found.' })
     }
 
     await ContactsRepository.delete(id);
